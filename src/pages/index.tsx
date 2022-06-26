@@ -1,5 +1,7 @@
 import type { NextPage } from "next";
 import Head from "next/head";
+import BackButtonDark from "../components/BackButtonDark";
+import BackButtonTransparent from "../components/BackButtonTransparent";
 import ButtonBlue from "../components/ButtonBlue";
 import ButtonDark from "../components/ButtonDark";
 import ButtonPurple from "../components/ButtonPurple";
@@ -11,10 +13,8 @@ const Home: NextPage = () => {
 
   return (
     <>
-      <ButtonBlue onClick={() => console.log("fuck all")}>Blue</ButtonBlue>
-      <ButtonPurple onClick={() => console.log("fuck all")}>Ayo</ButtonPurple>
-      <ButtonDark onClick={() => console.log("fuck all")}>Ayo</ButtonDark>
-      <ButtonRed onClick={() => console.log("fuck all")}>Ayo</ButtonRed>
+      <BackButtonTransparent onClick={() => console.log("fuck all")} />
+      <BackButtonDark onClick={() => console.log("fuck all")} />
     </>
   );
 };
