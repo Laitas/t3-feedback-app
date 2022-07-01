@@ -18,7 +18,7 @@ const Dropdown = () => {
         />
       </button>
       {active && (
-        <ul className="rounded-lg overflow-hidden shadow-lg flex flex-col absolute my-4 w-64">
+        <ul className="rounded-lg bg-white z-10 overflow-hidden shadow-lg flex flex-col absolute my-4 w-64">
           {["Feature", "UI", "UX", "Enhancement", "Bug"].map((i, idx) => (
             <li
               className="border-b cursor-pointer flex items-center justify-between py-3 px-6 hover:text-purple-1"

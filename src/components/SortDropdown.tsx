@@ -18,7 +18,7 @@ const SortDropdown = () => {
         />
       </button>
       {active && (
-        <ul className="rounded-lg overflow-hidden shadow-lg flex flex-col absolute my-4 w-64">
+        <ul className="rounded-lg bg-white z-10 overflow-hidden shadow-lg flex flex-col absolute my-4 w-64">
           {[
             "Most Upvotes",
             "Least Upvotes",
@@ -28,6 +28,10 @@ const SortDropdown = () => {
             <li
               className="border-b cursor-pointer flex items-center justify-between py-3 px-6 hover:text-purple-1"
               key={idx}
+              onClick={() => {
+                setSort(i);
+                setActive(false);
+              }}
             >
               {i} {sort === i && <HiCheck className="text-purple-1" />}
             </li>
