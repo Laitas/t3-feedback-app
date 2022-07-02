@@ -1,8 +1,6 @@
 import Link from "next/link";
-import React, { useState } from "react";
 
 const Roadmap = () => {
-  const [active, setActive] = useState("All");
   return (
     <section className="bg-white p-6 rounded-lg flex flex-col md:h-56 lg:h-64">
       <section className="flex justify-between items-center mb-6">
