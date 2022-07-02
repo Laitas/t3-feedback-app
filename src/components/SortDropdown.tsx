@@ -8,7 +8,7 @@ const SortDropdown = () => {
     <>
       <button
         onClick={() => setActive(!active)}
-        className="relative group hover:text-gray-1 flex items-center text-sm text-white bg-dark-accent rounded-lg py-6 px-4"
+        className="relative group hover:text-gray-1 flex items-center text-sm text-white bg-dark-accent rounded-lg sm:py-6 sm:px-4"
       >
         Sort by :<span className="font-semibold ml-1">{sort}</span>{" "}
         <HiChevronDown
@@ -18,7 +18,7 @@ const SortDropdown = () => {
         />
       </button>
       {active && (
-        <ul className="rounded-lg bg-white z-10 overflow-hidden shadow-lg flex flex-col absolute my-4 w-64">
+        <ul className="rounded-lg bg-white z-10 overflow-hidden shadow-lg flex flex-col absolute my-20 w-64">
           {[
             "Most Upvotes",
             "Least Upvotes",
