@@ -30,5 +30,5 @@
 }
 
 body {
-  @apply min-h-screen bg-light-gray;
+  @apply min-h-screen bg-light-gray max-w-[1440px] mx-auto;
 }

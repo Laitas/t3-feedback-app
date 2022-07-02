@@ -2,7 +2,7 @@ import Link from "next/link";
 
 const Roadmap = () => {
   return (
-    <section className="bg-white p-6 rounded-lg flex flex-col md:h-56 lg:h-64">
+    <section className="bg-white p-6 rounded-lg flex flex-col">
       <section className="flex justify-between items-center mb-6">
         <h2 className="font-bold text-lg">Roadmap</h2>
         <Link href="/roadmap">
