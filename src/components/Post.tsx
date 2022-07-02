@@ -9,7 +9,7 @@ interface Types {
   desc: string;
   type: string;
   upvotes: number;
-  comments: number;
+  comments: [];
 }
 
 const Post = ({ title, desc, type, upvotes, comments }: Types) => {
@@ -30,13 +30,17 @@ const Post = ({ title, desc, type, upvotes, comments }: Types) => {
           <UpvoteButton upvotes={upvotes} />
           <div className="flex items-center">
             <FaComment className="text-[#CDD2EE]" />
-            <span className="ml-2 text-light-accent font-bold">{comments}</span>
+            <span className="ml-2 text-light-accent font-bold">
+              {comments.length}
+            </span>
           </div>
         </div>
       </section>{" "}
       <div className="hidden sm:flex items-center ml-6">
         <FaComment className="text-[#CDD2EE]" />
-        <span className="ml-2 text-light-accent font-bold">{comments}</span>
+        <span className="ml-2 text-light-accent font-bold">
+          {comments.length}
+        </span>
       </div>
     </section>
   );

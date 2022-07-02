@@ -7,15 +7,8 @@ import Roadmap from "../components/Roadmap";
 import { trpc } from "../utils/trpc";
 
 const Home: NextPage = () => {
-  const hello = trpc.useQuery(["example.hello", { text: "from tRPC" }]);
-
-  const post = {
-    title: "string",
-    desc: "string",
-    type: "string",
-    upvotes: 69,
-    comments: 2,
-  };
+  const feature = trpc.useQuery(["posts.byType", { type: "Feature" }]);
+  const { data } = trpc.useQuery(["posts.all"]);
 
   return (
     <div className="flex flex-col lg:flex-row">
@@ -28,9 +21,9 @@ const Home: NextPage = () => {
       <Header className="sm:mx-10 lg:hidden" />
       <main className="mx-6 my-8 sm:mx-10 lg:w-full">
         <Header className="hidden lg:flex mb-6" />
-        <Post {...post} />
-        <Post {...post} />
-        <Post {...post} />
+        {data?.map((post: any) => (
+          <Post {...post} />
+        ))}
       </main>
     </div>
   );
