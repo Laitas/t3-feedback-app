@@ -1,7 +1,12 @@
+import { useSession } from "next-auth/react";
+import Link from "next/link";
+import { LinkPurple } from "./ButtonPurple";
 import InteractiveSection from "./InteractiveSection";
 import Roadmap from "./Roadmap";
 
 const SideNav = ({ open }: { open: boolean }) => {
+  const { status } = useSession();
+
   return (
     <div
       className={`${
@@ -13,6 +18,11 @@ const SideNav = ({ open }: { open: boolean }) => {
           !open ? "translate-x-full" : ""
         }`}
       >
+        {status === "unauthenticated" && (
+          <Link href="/signin" passHref>
+            <LinkPurple>Sign in</LinkPurple>
+          </Link>
+        )}
         <InteractiveSection />
         <Roadmap />
       </nav>
