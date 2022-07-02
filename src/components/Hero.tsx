@@ -1,5 +1,5 @@
 import Hamburger from "hamburger-react";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import SideNav from "./SideNav";
 
 const Hero = () => {

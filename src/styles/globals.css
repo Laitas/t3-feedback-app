@@ -28,3 +28,7 @@
     #28a7ed 100%
   );
 }
+
+body {
+  @apply min-h-screen bg-light-gray;
+}
