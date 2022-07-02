@@ -1,10 +1,12 @@
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { ChangeEvent, FormEvent, useState } from "react";
 import BackButtonTransparent from "../components/BackButtonTransparent";
 import ButtonPurple from "../components/ButtonPurple";
 import Input from "../components/Input";
 
 const SignIn = () => {
+  const { back } = useRouter();
   const [form, setForm] = useState({
     email: "",
     password: "",
@@ -22,7 +24,10 @@ const SignIn = () => {
   return (
     <div className="flex flex-col justify-center min-h-screen">
       <main className="p-12 rounded-lg bg-white max-w-sm mx-auto relative">
-        <BackButtonTransparent className="absolute -top-16 left-0" />
+        <BackButtonTransparent
+          onClick={back}
+          className="absolute -top-16 left-0"
+        />
         <h1 className="text-2xl text-light-accent font-bold">Sign in</h1>
         <form onSubmit={handleSubmit} className="flex flex-col gap-6 my-6">
           <label className="flex flex-col">
