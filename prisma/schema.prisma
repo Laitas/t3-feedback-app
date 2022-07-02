@@ -1,14 +1,15 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-generator client {
-    provider = "prisma-client-js"
+datasource db {
+    provider             = "mysql"
+    url                  = env("DATABASE_URL")
+    referentialIntegrity = "prisma"
 }
 
-datasource db {
-    provider = "sqlite"
-    url      = "file:./db.sqlite"
-    // url      = env("DATABASE_URL")
+generator client {
+    provider        = "prisma-client-js"
+    previewFeatures = ["referentialIntegrity"]
 }
 
 model Example {
@@ -50,6 +51,7 @@ model User {
     image         String?
     accounts      Account[]
     sessions      Session[]
+    posts         Post[]
 }
 
 model VerificationToken {
@@ -58,4 +60,23 @@ model VerificationToken {
     expires    DateTime
 
     @@unique([identifier, token])
+}
+
+model Post {
+    id        String    @id @default(cuid())
+    createdAt DateTime  @default(now())
+    User      User?     @relation(fields: [userId], references: [id])
+    userId    String
+    title     String
+    desc      String
+    comments  Comment[]
+    upvotes   Int
+    type      String
+    category  String
+}
+
+model Comment {
+    id     String  @id @default(cuid())
+    Post   Post?   @relation(fields: [postId], references: [id])
+    postId String?
 }
