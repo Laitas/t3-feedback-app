@@ -8,6 +8,15 @@ import { prisma } from "../../../server/db/client";
 
 export default NextAuth({
   // Configure one or more authentication providers
+  pages: {
+    signIn: "/signin",
+  },
+  session: {
+    strategy: "jwt",
+    maxAge: 30 * 24 * 60 * 60, // 30 days
+    updateAge: 24 * 60 * 60, // 24 hours
+  },
+  secret: process.env.NEXTAUTH_SECRET,
   adapter: PrismaAdapter(prisma),
   providers: [
     GithubProvider({
@@ -21,12 +30,9 @@ export default NextAuth({
         username: { label: "Username", type: "text", placeholder: "jsmith" },
         password: { label: "Password", type: "password" },
       },
-      async authorize(credentials, req) {
-        // Add logic here to look up the user from the credentials supplied
-        const user = { id: 1, name: "J Smith", email: "jsmith@example.com" };
-
-        if (user) {
-          return user;
+      async authorize(credentials) {
+        if (credentials) {
+          return credentials;
         } else {
           return null;
         }

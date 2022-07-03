@@ -7,8 +7,8 @@ import ButtonPurple from "../components/ButtonPurple";
 import Input from "../components/Input";
 import { trpc } from "../utils/trpc";
 
-const SignIn = () => {
-  const checkCredentials = trpc.useMutation("user.checkCredentials", {
+const SignUp = () => {
+  const signup = trpc.useMutation("user.signup", {
     onSuccess: async (data) =>
       await signIn("credentials", { data, callbackUrl: "/" }),
     onError: (error) => console.log(error),
@@ -16,12 +16,13 @@ const SignIn = () => {
   const { back } = useRouter();
   const [form, setForm] = useState({
     email: "",
+    name: "",
     password: "",
   });
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    checkCredentials.mutate(form);
+    signup.mutate(form);
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -35,7 +36,7 @@ const SignIn = () => {
           onClick={back}
           className="absolute -top-16 left-0"
         />
-        <h1 className="text-2xl text-light-accent font-bold">Sign in</h1>
+        <h1 className="text-2xl text-light-accent font-bold">Sign up</h1>
         <form onSubmit={handleSubmit} className="flex flex-col gap-6 my-6">
           <label className="flex flex-col">
             Email
@@ -44,6 +45,15 @@ const SignIn = () => {
               name="email"
               onChange={handleChange}
               value={form.email}
+            />
+          </label>
+          <label className="flex flex-col">
+            Username
+            <Input
+              error={false}
+              name="name"
+              onChange={handleChange}
+              value={form.name}
             />
           </label>
           <label className="flex flex-col">
@@ -56,20 +66,27 @@ const SignIn = () => {
               value={form.password}
             />
           </label>
+          <label className="flex flex-col">
+            Repeat password
+            <Input
+              error={false}
+              name="password"
+              type={"password"}
+              onChange={handleChange}
+              value={form.password}
+            />
+          </label>
           <ButtonPurple type="submit">Sign in</ButtonPurple>
         </form>
         <p>
-          Haven't got an account yet?{" "}
+          Already have an account?{" "}
           <span className="text-blue-1 hover:text-blue-2 transition-colors">
-            <Link href="/signup">Sign up</Link>
+            <Link href="/signin">Sign in</Link>
           </span>
-        </p>
-        <p>
-          Forgot password? <span>Too bad lol</span>
         </p>
       </main>
     </div>
   );
 };
 
-export default SignIn;
+export default SignUp;
