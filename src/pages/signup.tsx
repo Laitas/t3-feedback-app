@@ -10,7 +10,7 @@ import { trpc } from "../utils/trpc";
 const SignUp = () => {
   const signup = trpc.useMutation("user.signup", {
     onSuccess: async (data) =>
-      await signIn("credentials", { data, callbackUrl: "/" }),
+      await signIn("credentials", { ...data, callbackUrl: "/" }),
     onError: (error) => console.log(error),
   });
   const { back } = useRouter();

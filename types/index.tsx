@@ -1,3 +1,5 @@
+import { categories } from "../src/constants";
+
 export interface Button {
   onClick?: () => void;
   className?: string;
@@ -9,3 +11,5 @@ export interface Link {
   children: string;
   href?: string;
 }
+
+export type Category = typeof categories[number];

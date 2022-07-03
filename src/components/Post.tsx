@@ -7,14 +7,14 @@ import Link from "next/link";
 interface Types {
   title: string;
   desc: string;
-  type: string;
+  category: string;
   upvotes: number;
   _count: {
     comments: number;
   };
 }
 
-const Post = ({ title, desc, type, upvotes, _count }: Types) => {
+const Post = ({ title, desc, category, upvotes, _count }: Types) => {
   return (
     <section className="p-6 rounded-lg flex bg-white mb-4 sm:mb-5">
       <div className="hidden sm:block mr-10">
@@ -27,7 +27,7 @@ const Post = ({ title, desc, type, upvotes, _count }: Types) => {
           </a>
         </Link>
         <p className="text-sm text-dark-gray sm:text-base">{desc}</p>
-        <InteractiveElement onClick={() => null}>{type}</InteractiveElement>
+        <InteractiveElement onClick={() => null}>{category}</InteractiveElement>
         <div className="flex justify-between sm:hidden">
           <UpvoteButton upvotes={upvotes} />
           <div className="flex items-center">

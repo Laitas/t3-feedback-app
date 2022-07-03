@@ -3,15 +3,13 @@ import { z } from "zod";
 
 export const postsRouter = createRouter()
   .query("byType", {
-    input: z
-      .object({
-        type: z.enum(["UI", "UX", "Enhancement", "Bug", "Feature"]),
-      })
-      .nullish(),
+    input: z.object({
+      category: z.enum(["UI", "UX", "Enhancement", "Bug", "Feature"]),
+    }),
     async resolve({ ctx, input }) {
       return await ctx.prisma.post.findMany({
         where: {
-          type: input?.type,
+          category: input?.category,
         },
         include: {
           _count: {
@@ -35,5 +33,24 @@ export const postsRouter = createRouter()
         },
       });
       return posts;
+    },
+  })
+  .mutation("new", {
+    input: z.object({
+      title: z.string(),
+      desc: z.string(),
+      category: z.enum(["UI", "UX", "Enhancement", "Bug", "Feature"]),
+      userId: z.string(),
+    }),
+    async resolve({ ctx, input: { title, desc, category, userId } }) {
+      return await ctx.prisma.post.create({
+        data: {
+          title,
+          desc,
+          category,
+          upvotes: 0,
+          userId,
+        },
+      });
     },
   });
