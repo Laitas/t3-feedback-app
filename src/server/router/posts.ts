@@ -14,7 +14,11 @@ export const postsRouter = createRouter()
           type: input?.type,
         },
         include: {
-          comments: true,
+          _count: {
+            select: {
+              comments: true,
+            },
+          },
         },
       });
     },
@@ -23,7 +27,11 @@ export const postsRouter = createRouter()
     async resolve({ ctx }) {
       const posts = await ctx.prisma.post.findMany({
         include: {
-          comments: true,
+          _count: {
+            select: {
+              comments: true,
+            },
+          },
         },
       });
       return posts;

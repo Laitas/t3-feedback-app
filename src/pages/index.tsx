@@ -1,5 +1,4 @@
 import type { NextPage } from "next";
-import { useSession } from "next-auth/react";
 import Header from "../components/Header";
 import Hero from "../components/Hero";
 import InteractiveSection from "../components/InteractiveSection";
@@ -10,9 +9,6 @@ import { trpc } from "../utils/trpc";
 const Home: NextPage = () => {
   const feature = trpc.useQuery(["posts.byType", { type: "Feature" }]);
   const { data } = trpc.useQuery(["posts.all"]);
-  const { data: session, status } = useSession();
-  console.log(session);
-  console.log(status);
 
   return (
     <div className="flex flex-col lg:flex-row">

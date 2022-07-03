@@ -9,10 +9,12 @@ interface Types {
   desc: string;
   type: string;
   upvotes: number;
-  comments: [];
+  _count: {
+    comments: number;
+  };
 }
 
-const Post = ({ title, desc, type, upvotes, comments }: Types) => {
+const Post = ({ title, desc, type, upvotes, _count }: Types) => {
   return (
     <section className="p-6 rounded-lg flex bg-white mb-4 sm:mb-5">
       <div className="hidden sm:block mr-10">
@@ -31,7 +33,7 @@ const Post = ({ title, desc, type, upvotes, comments }: Types) => {
           <div className="flex items-center">
             <FaComment className="text-[#CDD2EE]" />
             <span className="ml-2 text-light-accent font-bold">
-              {comments.length}
+              {_count.comments}
             </span>
           </div>
         </div>
@@ -39,7 +41,7 @@ const Post = ({ title, desc, type, upvotes, comments }: Types) => {
       <div className="hidden sm:flex items-center ml-6">
         <FaComment className="text-[#CDD2EE]" />
         <span className="ml-2 text-light-accent font-bold">
-          {comments.length}
+          {_count.comments}
         </span>
       </div>
     </section>
