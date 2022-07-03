@@ -16,6 +16,7 @@
     "@trpc/next": "^9.25.3",
     "@trpc/react": "^9.25.3",
     "@trpc/server": "^9.25.3",
+    "crypto-js": "^4.1.1",
     "hamburger-react": "^2.5.0",
     "next": "12.2.0",
     "next-auth": "^4.7.0",
@@ -27,6 +28,7 @@
     "zod": "^3.17.3"
   },
   "devDependencies": {
+    "@types/crypto-js": "^4.1.1",
     "@types/node": "18.0.0",
     "@types/react": "18.0.14",
     "@types/react-dom": "18.0.5",

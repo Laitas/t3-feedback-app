@@ -4,17 +4,23 @@ import { ChangeEvent, FormEvent, useState } from "react";
 import BackButtonTransparent from "../components/BackButtonTransparent";
 import ButtonPurple from "../components/ButtonPurple";
 import Input from "../components/Input";
+import { trpc } from "../utils/trpc";
 
 const SignIn = () => {
+  const signup = trpc.useMutation("user.signup", {
+    onSuccess: (data) => console.log(data),
+    onError: (error) => console.log(error),
+  });
   const { back } = useRouter();
   const [form, setForm] = useState({
     email: "",
+    name: "",
     password: "",
   });
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    console.log("lol no");
+    signup.mutate(form);
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -37,6 +43,15 @@ const SignIn = () => {
               name="email"
               onChange={handleChange}
               value={form.email}
+            />
+          </label>
+          <label className="flex flex-col">
+            Username
+            <Input
+              error={false}
+              name="name"
+              onChange={handleChange}
+              value={form.name}
             />
           </label>
           <label className="flex flex-col">
