@@ -1,6 +1,6 @@
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
-import { LinkPurple } from "./ButtonPurple";
+import ButtonPurple, { LinkPurple } from "./ButtonPurple";
 import InteractiveSection from "./InteractiveSection";
 import Roadmap from "./Roadmap";
 
@@ -22,6 +22,9 @@ const SideNav = ({ open }: { open: boolean }) => {
           <Link href="/signin" passHref>
             <LinkPurple>Sign in</LinkPurple>
           </Link>
+        )}
+        {status === "authenticated" && (
+          <ButtonPurple onClick={signOut}>Sign out</ButtonPurple>
         )}
         <InteractiveSection />
         <Roadmap />

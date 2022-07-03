@@ -41,6 +41,12 @@ export const userRouter = createRouter()
           password: true,
         },
       });
-      if (user && user.password == hashPassword(input.password)) return user;
+      if (user && user.password == hashPassword(input.password))
+        return {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          picture: user.image,
+        };
     },
   });
