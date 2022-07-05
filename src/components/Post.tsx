@@ -5,6 +5,7 @@ import { FaComment } from "react-icons/fa";
 import Link from "next/link";
 
 interface Types {
+  id: string;
   title: string;
   desc: string;
   category: string;
@@ -14,14 +15,14 @@ interface Types {
   };
 }
 
-const Post = ({ title, desc, category, upvotes, _count }: Types) => {
+const Post = ({ id, title, desc, category, upvotes, _count }: Types) => {
   return (
     <section className="p-6 rounded-lg flex bg-white mb-4 sm:mb-5">
       <div className="hidden sm:block mr-10">
         <UpvoteButton upvotes={upvotes} />
       </div>
       <section className="flex flex-col gap-4 flex-1">
-        <Link href={"/"}>
+        <Link href={`/post/${id}`}>
           <a className="text-sm text-light-accent font-bold sm:text-lg hover:text-blue-1 transition-colors">
             {title}
           </a>

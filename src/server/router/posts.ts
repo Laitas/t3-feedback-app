@@ -21,6 +21,26 @@ export const postsRouter = createRouter()
       });
     },
   })
+  .query("byId", {
+    input: z.object({
+      id: z.string(),
+    }),
+    async resolve({ ctx, input }) {
+      return await ctx.prisma.post.findUnique({
+        where: {
+          id: input?.id,
+        },
+        include: {
+          comments: true,
+          _count: {
+            select: {
+              comments: true,
+            },
+          },
+        },
+      });
+    },
+  })
   .query("all", {
     async resolve({ ctx }) {
       const posts = await ctx.prisma.post.findMany({
