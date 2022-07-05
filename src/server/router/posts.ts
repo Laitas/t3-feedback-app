@@ -31,7 +31,18 @@ export const postsRouter = createRouter()
           id: input?.id,
         },
         include: {
-          comments: true,
+          comments: {
+            include: {
+              author: {
+                select: {
+                  email: true,
+                  id: true,
+                  name: true,
+                  image: true,
+                },
+              },
+            },
+          },
           _count: {
             select: {
               comments: true,
