@@ -41,11 +41,12 @@ model Session {
 
 model User {
     id            String    @id @default(cuid())
-    name          String?
+    name          String
+    username      String
     email         String?   @unique
     emailVerified DateTime?
     password      String?
-    image         String?
+    image         String    @default("https://res.cloudinary.com/dfzejvvsl/image/upload/v1656084356/cld-sample-3.jpg")
     accounts      Account[]
     sessions      Session[]
     posts         Post[]

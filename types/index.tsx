@@ -13,3 +13,16 @@ export interface Link {
 }
 
 export type Category = typeof categories[number];
+
+export interface Comments {
+  author: {
+    email: string;
+    id: string;
+    image: string;
+    name: string;
+  };
+  comment: string;
+  commentId: string;
+  id: string;
+  postId: string;
+}
