@@ -15,8 +15,9 @@ const CommentsSection = ({ count, comments }: Types) => {
       {comments &&
         comments.map((c, idx) => (
           <Comment
-            className={idx !== 0 ? "border-t-2 pt-8" : ""}
+            className={idx !== 0 ? "border-t-2 pt-4 mt-4" : ""}
             key={c.id}
+            commentId={c.id}
             {...c}
           />
         ))}

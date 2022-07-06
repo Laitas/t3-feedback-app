@@ -27,7 +27,7 @@ const PostPage = () => {
 
   const addComment = (e: FormEvent, comment: string) => {
     e.preventDefault();
-    if (data && session)
+    if (data && session) {
       if (comment.length < 10) setError(true);
       else
         newComment.mutate({
@@ -35,6 +35,7 @@ const PostPage = () => {
           authorId: session.user.id,
           comment,
         });
+    }
   };
   console.log(data);
   const { data: session } = useSession();

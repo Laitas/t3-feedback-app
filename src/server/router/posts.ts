@@ -33,6 +33,18 @@ export const postsRouter = createRouter()
         include: {
           comments: {
             include: {
+              replies: {
+                include: {
+                  author: {
+                    select: {
+                      username: true,
+                      id: true,
+                      name: true,
+                      image: true,
+                    },
+                  },
+                },
+              },
               author: {
                 select: {
                   username: true,

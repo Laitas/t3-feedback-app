@@ -1,27 +1,27 @@
 import Image from "next/image";
-import React, { useState } from "react";
+import { useState } from "react";
 import { Comments } from "../../types";
 import Reply from "./Reply";
-import ReplyComment from "./ReplyComment";
 
-interface Types extends Comments {
-  className: string;
-  commentId: string;
+interface Types {
+  author: Comments["author"];
+  className?: string;
+  reply: string;
+  replyingTo: string;
+  commentId: Comments["id"];
 }
-
-const Comment = ({
-  commentId,
-  comment,
-  author: { username, id, image, name },
+const ReplyComment = ({
   className,
-  replies,
+  author: { image, id, name, username },
+  reply,
+  replyingTo,
+  commentId,
 }: Types) => {
-  const [reply, setReply] = useState(false);
+  const [replyState, setReply] = useState(false);
   if (username && image && name)
     return (
       <section className={`${className} sm:flex`}>
-        <div className="hidden relative sm:block overflow-hidden">
-          <div className="absolute top-[3.75rem] bottom-5 bg-gray-1 w-[2px] left-1/2" />
+        <div className="hidden sm:block">
           <Image width={40} height={40} src={image} className="rounded-full" />
         </div>
         <section className="flex flex-col flex-1 sm:pl-8">
@@ -47,19 +47,15 @@ const Comment = ({
               Reply
             </button>
           </section>
-          <div className="text-dark-gray my-4">{comment}</div>
-          {replies && (
-            <section className="pl-6 border-l-2 sm:border-none sm:-ml-10">
-              {replies.map((r) => (
-                <ReplyComment key={r.id} {...r} />
-              ))}
-            </section>
-          )}
-          {reply && <Reply replyingTo={username} commentId={commentId} />}
+          <div className="text-dark-gray my-4">
+            <span className="font-semibold text-purple-1">@{replyingTo} </span>
+            {reply}
+          </div>
+          {replyState && <Reply replyingTo={username} commentId={commentId} />}
         </section>
       </section>
     );
   return <h1>Loading...</h1>;
 };
 
-export default Comment;
+export default ReplyComment;
