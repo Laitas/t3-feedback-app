@@ -13,7 +13,9 @@ const PostPage = () => {
   const { query, back } = useRouter();
   const id = query.id as string;
   const [error, setError] = useState(false);
-  const { data, refetch } = trpc.useQuery(["posts.byId", { id }]);
+  const { data, refetch } = trpc.useQuery(["posts.byId", { id }], {
+    enabled: id !== undefined,
+  });
   const newComment = trpc.useMutation(["comments.new"], {
     onSuccess: () => {
       refetch();
