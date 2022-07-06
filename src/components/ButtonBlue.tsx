@@ -9,6 +9,7 @@ const ButtonBlue = ({
 }: Button) => {
   return (
     <button
+      type={type}
       onClick={onClick}
       className={`${className} py-3 px-6 bg-blue-1 text-white text-sm font-bold rounded-lg hover:bg-blue-2 transition-colors`}
     >

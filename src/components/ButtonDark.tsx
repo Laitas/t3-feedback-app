@@ -10,6 +10,7 @@ const ButtonDark = ({
   return (
     <button
       onClick={onClick}
+      type={type}
       className={`${className} py-3 px-6 bg-dark-accent text-white text-sm font-bold rounded-lg hover:bg-dark-accent-hover transition-colors`}
     >
       {children}

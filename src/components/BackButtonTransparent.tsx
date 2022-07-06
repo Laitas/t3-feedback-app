@@ -10,6 +10,7 @@ const BackButtonTransparent = ({
   return (
     <button
       onClick={onClick}
+      type={type}
       className={`${className} bottom-border flex items-center bg-transparent text-blue-1 text-sm font-bold rounded-lg`}
     >
       <HiChevronLeft />
