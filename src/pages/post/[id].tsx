@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
 import React from "react";
+import AddComment from "../../components/AddComment";
 import BackButtonTransparent from "../../components/BackButtonTransparent";
 import ButtonBlue from "../../components/ButtonBlue";
 import CommentsSection from "../../components/CommentsSection";
@@ -24,6 +25,7 @@ const PostPage = () => {
             count={data._count.comments}
             comments={data.comments}
           />
+          <AddComment />
         </main>
       </div>
     );

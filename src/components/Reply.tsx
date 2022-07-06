@@ -11,6 +11,7 @@ const Reply = () => {
         value={value}
         error={false}
         className="w-full"
+        placeholder="Type your comment here"
       />
       <div className="sm:ml-4">
         <ButtonPurple className="whitespace-nowrap w-full">

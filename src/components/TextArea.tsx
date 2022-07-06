@@ -5,12 +5,20 @@ interface Types {
   value: string;
   error: boolean;
   className?: string;
+  placeholder?: string;
 }
-const TextArea = ({ onChange, value, error, className }: Types) => {
+const TextArea = ({
+  onChange,
+  value,
+  error,
+  className,
+  placeholder,
+}: Types) => {
   return (
     <section className="w-full">
       <>
         <textarea
+          placeholder={placeholder}
           onChange={onChange}
           value={value}
           className={`${className} bg-[#F7F8FD] text-dark-accent py-3 px-6 rounded-md active:outline-blue-1 outline-blue-1 ${
