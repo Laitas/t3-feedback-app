@@ -1,5 +1,5 @@
-import { signIn, useSession } from "next-auth/react";
-import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
+import Router, { useRouter } from "next/router";
 import { ChangeEvent, FormEvent, useState } from "react";
 import { Category } from "../../types";
 import BackButtonTransparent from "../components/BackButtonTransparent";
@@ -7,23 +7,38 @@ import ButtonDark from "../components/ButtonDark";
 import ButtonPurple from "../components/ButtonPurple";
 import Dropdown from "../components/Dropdown";
 import Input from "../components/Input";
+import useAddFeedbackValidation from "../hooks/validations/useAddFeedbackValidation";
 import { trpc } from "../utils/trpc";
+
+const initialValues = {
+  title: "",
+  desc: "",
+};
 
 const AddFeedback = () => {
   const post = trpc.useMutation("posts.new", {
-    onSuccess: async (data) => console.log(data),
+    onSuccess: (data) => Router.push(`/post/${data.id}`),
     onError: (error) => console.log(error),
   });
   const { back } = useRouter();
   const { data: session } = useSession();
   const [category, setCategory] = useState<Category>("Feature");
-  const [form, setForm] = useState({
-    title: "",
-    desc: "",
+  const [form, setForm] = useState(initialValues);
+  const [errorText, setErrorText] = useState(initialValues);
+  const [errors, setErrors] = useState({
+    title: false,
+    desc: false,
+  });
+  const { validations } = useAddFeedbackValidation({
+    form,
+    setErrorText,
+    errorText,
+    setErrors,
   });
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
+    if (!validations()) return;
     if (session) {
       post.mutate({ ...form, category, userId: session.user.id });
     }
@@ -55,10 +70,11 @@ const AddFeedback = () => {
               Add a short, descriptive headline
             </p>
             <Input
-              error={false}
               name="title"
               onChange={handleChange}
               value={form.title}
+              error={errors.title}
+              errorText={errorText.title}
             />
           </label>
           <section className="flex flex-col relative">
@@ -81,10 +97,11 @@ const AddFeedback = () => {
               etc.
             </p>
             <Input
-              error={false}
               name="desc"
               onChange={handleChange}
               value={form.desc}
+              error={errors.desc}
+              errorText={errorText.desc}
             />
           </label>
           <section className="flex gap-4 justify-end">

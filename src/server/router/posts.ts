@@ -68,8 +68,8 @@ export const postsRouter = createRouter()
   })
   .mutation("new", {
     input: z.object({
-      title: z.string(),
-      desc: z.string(),
+      title: z.string().min(10),
+      desc: z.string().min(10),
       category: z.enum(["UI", "UX", "Enhancement", "Bug", "Feature"]),
       userId: z.string(),
     }),
