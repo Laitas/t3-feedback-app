@@ -21,7 +21,9 @@ const Comment = ({
     return (
       <section className={`${className} sm:flex`}>
         <div className="hidden relative sm:block overflow-hidden">
-          <div className="absolute top-[3.75rem] bottom-5 bg-gray-1 w-[2px] left-1/2" />
+          {replies && replies.length >= 1 && (
+            <div className="absolute top-[3.75rem] bottom-5 bg-gray-1 w-[2px] left-1/2" />
+          )}
           <Image width={40} height={40} src={image} className="rounded-full" />
         </div>
         <section className="flex flex-col flex-1 sm:pl-8">

@@ -41,7 +41,7 @@ const ReplyComment = ({
               </div>
             </div>
             <button
-              onClick={() => setReply(!reply)}
+              onClick={() => setReply(!replyState)}
               className="text-sm font-semibold text-blue-1 hover:text-blue-2 hover:underline transition-all"
             >
               Reply
