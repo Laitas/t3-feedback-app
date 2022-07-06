@@ -32,7 +32,7 @@ const PostPage = () => {
       else
         newComment.mutate({
           postId: data.id,
-          commentId: session.user.id,
+          authorId: session.user.id,
           comment,
         });
   };

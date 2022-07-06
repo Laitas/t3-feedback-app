@@ -9,11 +9,11 @@ interface Types extends Comments {
 
 const Comment = ({
   comment,
-  author: { email, id, image, name },
+  author: { username, id, image, name },
   className,
 }: Types) => {
   const [reply, setReply] = useState(false);
-  if (email && image && name)
+  if (username && image && name)
     return (
       <section className={`${className} sm:flex`}>
         <div className="hidden sm:block">
@@ -32,7 +32,7 @@ const Comment = ({
               </div>
               <div className="ml-4 sm:ml-0">
                 <p className="text-light-accent font-bold text-sm">{name}</p>
-                <p className="text-sm text-dark-gray">@{email}</p>
+                <p className="text-sm text-dark-gray">@{username}</p>
               </div>
             </div>
             <button

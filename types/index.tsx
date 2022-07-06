@@ -18,7 +18,7 @@ export type Category = typeof categories[number];
 export interface Comments extends Comment {
   author: {
     id: string;
-    email: string | null;
+    username: string | null;
     name: string | null;
     image: string | null;
   };

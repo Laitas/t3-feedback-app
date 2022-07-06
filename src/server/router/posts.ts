@@ -35,7 +35,7 @@ export const postsRouter = createRouter()
             include: {
               author: {
                 select: {
-                  email: true,
+                  username: true,
                   id: true,
                   name: true,
                   image: true,

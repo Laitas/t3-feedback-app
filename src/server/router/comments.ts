@@ -4,7 +4,7 @@ import { z } from "zod";
 export const commentsRouter = createRouter().mutation("new", {
   input: z.object({
     postId: z.string(),
-    commentId: z.string(),
+    authorId: z.string(),
     comment: z.string().min(10),
   }),
   async resolve({ ctx, input }) {
