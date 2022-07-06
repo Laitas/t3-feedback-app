@@ -1,3 +1,4 @@
+import { Comment } from "@prisma/client";
 import { categories } from "../src/constants";
 
 export interface Button {
@@ -14,15 +15,11 @@ export interface Link {
 
 export type Category = typeof categories[number];
 
-export interface Comments {
+export interface Comments extends Comment {
   author: {
-    email: string;
     id: string;
-    image: string;
-    name: string;
+    email: string | null;
+    name: string | null;
+    image: string | null;
   };
-  comment: string;
-  commentId: string;
-  id: string;
-  postId: string;
 }

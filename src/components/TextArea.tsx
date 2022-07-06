@@ -26,7 +26,9 @@ const TextArea = ({
           }`}
         />
         {error && (
-          <p className="text-sm text-red-1 mt-1">Can&apos;t be empty</p>
+          <p className="text-sm text-red-1 mt-1">
+            Can&apos;t be empty or less than 10 characters
+          </p>
         )}
       </>
     </section>
