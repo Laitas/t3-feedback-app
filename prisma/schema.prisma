@@ -51,6 +51,7 @@ model User {
     sessions      Session[]
     posts         Post[]
     comments      Comment[]
+    Reply         Reply[]
 }
 
 model VerificationToken {
@@ -74,10 +75,19 @@ model Post {
 }
 
 model Comment {
+    id       String  @id @default(cuid())
+    Post     Post    @relation(fields: [postId], references: [id])
+    author   User    @relation(fields: [authorId], references: [id])
+    authorId String
+    postId   String
+    comment  String
+    replies  Reply[]
+}
+
+model Reply {
     id        String  @id @default(cuid())
-    Post      Post?   @relation(fields: [postId], references: [id])
-    author    User    @relation(fields: [commentId], references: [id])
+    author    User    @relation(fields: [authorId], references: [id])
+    authorId  String
+    Comment   Comment @relation(fields: [commentId], references: [id])
     commentId String
-    postId    String?
-    comment   String
 }
