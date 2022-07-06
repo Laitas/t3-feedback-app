@@ -59,7 +59,7 @@ const SignIn = () => {
           <ButtonPurple type="submit">Sign in</ButtonPurple>
         </form>
         <p>
-          Haven't got an account yet?{" "}
+          {`Haven't got an account yet?`}{" "}
           <span className="text-blue-1 hover:text-blue-2 transition-colors">
             <Link href="/signup">Sign up</Link>
           </span>

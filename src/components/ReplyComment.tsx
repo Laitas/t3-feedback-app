@@ -22,7 +22,13 @@ const ReplyComment = ({
     return (
       <section className={`${className} sm:flex`}>
         <div className="hidden sm:block">
-          <Image width={40} height={40} src={image} className="rounded-full" />
+          <Image
+            width={40}
+            height={40}
+            alt="user"
+            src={image}
+            className="rounded-full"
+          />
         </div>
         <section className="flex flex-col flex-1 sm:pl-8">
           <section className="flex justify-between">
@@ -31,6 +37,7 @@ const ReplyComment = ({
                 <Image
                   width={40}
                   height={40}
+                  alt="user"
                   src={image}
                   className="rounded-full"
                 />

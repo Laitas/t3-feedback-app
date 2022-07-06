@@ -24,7 +24,13 @@ const Comment = ({
           {replies && replies.length >= 1 && (
             <div className="absolute top-[3.75rem] bottom-5 bg-gray-1 w-[2px] left-1/2" />
           )}
-          <Image width={40} height={40} src={image} className="rounded-full" />
+          <Image
+            width={40}
+            height={40}
+            src={image}
+            alt="user"
+            className="rounded-full"
+          />
         </div>
         <section className="flex flex-col flex-1 sm:pl-8">
           <section className="flex justify-between">
@@ -35,6 +41,7 @@ const Comment = ({
                   height={40}
                   src={image}
                   className="rounded-full"
+                  alt="user"
                 />
               </div>
               <div className="ml-4 sm:ml-0">
