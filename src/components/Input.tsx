@@ -7,6 +7,7 @@ interface Types {
   value: string;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
   name: string;
+  errorText?: string;
 }
 
 const Input = ({
@@ -16,6 +17,7 @@ const Input = ({
   onChange,
   value,
   name,
+  errorText,
 }: Types) => {
   return (
     <>
@@ -29,7 +31,11 @@ const Input = ({
           error && "border border-red-1"
         }`}
       />
-      {error && <p className="text-sm text-red-1 mt-1">Can&apos;t be empty</p>}
+      {error && (
+        <p className="text-sm text-red-1 mt-1">
+          {errorText ? errorText : `Can't be empty`}
+        </p>
+      )}
     </>
   );
 };

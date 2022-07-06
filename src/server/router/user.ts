@@ -11,6 +11,7 @@ export const userRouter = createRouter()
     input: z.object({
       email: z.string().min(1),
       name: z.string().min(3),
+      username: z.string().min(3),
       password: z.string().min(6),
     }),
     async resolve({ ctx, input }) {
@@ -18,6 +19,7 @@ export const userRouter = createRouter()
         data: {
           email: input?.email,
           name: input?.name,
+          username: input?.username,
           password: hashPassword(input?.password),
         },
       });
