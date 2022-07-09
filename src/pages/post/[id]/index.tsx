@@ -1,16 +1,17 @@
 import { useSession } from "next-auth/react";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { FormEvent, useState } from "react";
-import AddComment from "../../components/AddComment";
-import BackButtonTransparent from "../../components/BackButtonTransparent";
-import ButtonBlue from "../../components/ButtonBlue";
-import CommentsSection from "../../components/CommentsSection";
-import Post from "../../components/Post";
-import { trpc } from "../../utils/trpc";
+import AddComment from "../../../components/AddComment";
+import BackButtonTransparent from "../../../components/BackButtonTransparent";
+import { LinkBlue } from "../../../components/ButtonBlue";
+import CommentsSection from "../../../components/CommentsSection";
+import Post from "../../../components/Post";
+import { trpc } from "../../../utils/trpc";
 
 const PostPage = () => {
   const [comment, setComment] = useState("");
-  const { query, back } = useRouter();
+  const { query, push } = useRouter();
   const id = query.id as string;
   const [error, setError] = useState(false);
   const { data, refetch } = trpc.useQuery(["posts.byId", { id }], {
@@ -45,8 +46,12 @@ const PostPage = () => {
     return (
       <div className="px-6 md:px-10 max-w-5xl mx-auto">
         <section className="flex justify-between items-center py-6 sm:pt-14">
-          <BackButtonTransparent onClick={back} />{" "}
-          <ButtonBlue>Edit Feedback</ButtonBlue>
+          <BackButtonTransparent onClick={() => push("/")} />{" "}
+          {data.userId === session?.user.id && (
+            <Link href={id + "/edit"} passHref>
+              <LinkBlue>Edit Feedback</LinkBlue>
+            </Link>
+          )}
         </section>
         <main className="flex flex-col gap-6 mb-10">
           <Post {...data} />

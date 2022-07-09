@@ -96,4 +96,25 @@ export const postsRouter = createRouter()
         },
       });
     },
+  })
+  .mutation("edit", {
+    input: z.object({
+      title: z.string().min(10),
+      desc: z.string().min(10),
+      category: z.enum(["UI", "UX", "Enhancement", "Bug", "Feature"]),
+      userId: z.string(),
+      id: z.string(),
+    }),
+    async resolve({ ctx, input: { title, desc, category, userId, id } }) {
+      return await ctx.prisma.post.update({
+        where: { id },
+        data: {
+          title,
+          desc,
+          category,
+          upvotes: 0,
+          userId,
+        },
+      });
+    },
   });
