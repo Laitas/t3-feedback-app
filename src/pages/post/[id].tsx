@@ -54,12 +54,14 @@ const PostPage = () => {
             count={data._count.comments}
             comments={data.comments && data.comments}
           />
-          <AddComment
-            value={comment}
-            setValue={setComment}
-            error={error}
-            addComment={addComment}
-          />
+          {session && (
+            <AddComment
+              value={comment}
+              setValue={setComment}
+              error={error}
+              addComment={addComment}
+            />
+          )}
         </main>
       </div>
     );
