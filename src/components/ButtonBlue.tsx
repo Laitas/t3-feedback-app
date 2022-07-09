@@ -23,7 +23,7 @@ export const LinkBlue = React.forwardRef<HTMLAnchorElement, Link>(
       <a
         href={href}
         ref={ref}
-        className={`${className} cursor-pointer py-2 px-4 sm:py-3 sm:px-6 bg-purple-1 text-white text-sm font-bold rounded-lg hover:bg-purple-2 transition-colors`}
+        className={`${className} cursor-pointer py-2 px-4 sm:py-3 sm:px-6 bg-blue-1 text-white text-sm font-bold rounded-lg hover:bg-purple-2 transition-colors`}
       >
         {children}
       </a>
