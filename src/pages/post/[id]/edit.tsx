@@ -41,7 +41,7 @@ const Edit = () => {
     updatePost.mutate({
       category,
       id,
-      userId: session?.user.id,
+      userId: session?.user.id as string,
       title: form.title,
       desc: form.desc,
     });
