@@ -4,13 +4,16 @@ import { Category } from "../../types";
 import Header from "../components/Header";
 import Hero from "../components/Hero";
 import InteractiveSection from "../components/InteractiveSection";
+import NoFeedback from "../components/NoFeedback";
 import Post from "../components/Post";
 import PostSkeleton from "../components/PostSkeleton";
 import Roadmap from "../components/Roadmap";
 import { trpc } from "../utils/trpc";
+import { useAtom } from "jotai";
+import { cat } from "../constants";
 
 const Home: NextPage = () => {
-  const [active, setActive] = useState<Category | "All">("All");
+  const [active, setActive] = useAtom(cat);
   const category = trpc.useQuery(
     ["posts.byCategory", { category: active as Category }],
     {
@@ -25,7 +28,7 @@ const Home: NextPage = () => {
     <div className="flex flex-col lg:flex-row">
       <section className="hidden sm:grid grid-cols-3 gap-4 mt-14 mb-10 mx-10 lg:flex flex-col lg:max-w-[16rem] lg:mt-8 lg:mr-0">
         <Hero />
-        <InteractiveSection active={active} setActive={setActive} />
+        <InteractiveSection />
         <Roadmap />
       </section>
       <Hero className="sm:hidden" />
@@ -40,9 +43,11 @@ const Home: NextPage = () => {
           category.data?.map((post) => (
             <Post key={post.id} {...post} byCat setActive={setActive} />
           ))}
-        {all.isLoading ||
-          (category.isLoading &&
-            [...Array(10)].map((i) => <PostSkeleton key={i} />))}
+        {(all.isLoading || category.isLoading) &&
+          [...Array(10)].map((i, idx) => <PostSkeleton key={idx} />)}
+        {(all.data?.length === 0 || category.data?.length === 0) && (
+          <NoFeedback />
+        )}
       </main>
     </div>
   );
