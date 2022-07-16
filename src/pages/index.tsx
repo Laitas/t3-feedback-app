@@ -13,7 +13,7 @@ import { useAtom } from "jotai";
 import { cat } from "../constants";
 
 const Home: NextPage = () => {
-  const [active, setActive] = useAtom(cat);
+  const [active] = useAtom(cat);
   const category = trpc.useQuery(
     ["posts.byCategory", { category: active as Category }],
     {
@@ -36,13 +36,9 @@ const Home: NextPage = () => {
       <main className="mx-6 my-8 sm:mx-10 lg:w-full">
         <Header className="hidden lg:flex mb-6" />
         {active === "All" &&
-          all.data?.map((post) => (
-            <Post key={post.id} {...post} setActive={setActive} />
-          ))}
+          all.data?.map((post) => <Post key={post.id} {...post} />)}
         {active !== "All" &&
-          category.data?.map((post) => (
-            <Post key={post.id} {...post} byCat setActive={setActive} />
-          ))}
+          category.data?.map((post) => <Post key={post.id} {...post} byCat />)}
         {(all.isLoading || category.isLoading) &&
           [...Array(10)].map((i, idx) => <PostSkeleton key={idx} />)}
         {(all.data?.length === 0 || category.data?.length === 0) && (

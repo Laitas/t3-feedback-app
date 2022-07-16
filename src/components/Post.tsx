@@ -4,6 +4,9 @@ import UpvoteButton from "./UpvoteButton";
 import { FaComment } from "react-icons/fa";
 import Link from "next/link";
 import { Category } from "../../types";
+import { useAtom } from "jotai";
+import { cat } from "../constants";
+import { useRouter } from "next/router";
 
 interface Types {
   id: string;
@@ -15,7 +18,6 @@ interface Types {
     comments: number;
   };
   byCat?: boolean;
-  setActive: Dispatch<SetStateAction<Category | "All">>;
 }
 
 const Post = ({
@@ -26,8 +28,9 @@ const Post = ({
   upvotes,
   _count,
   byCat = false,
-  setActive,
 }: Types) => {
+  const [, setActive] = useAtom(cat);
+  const { pathname, push } = useRouter();
   return (
     <section className="p-6 rounded-lg flex bg-white mb-4 sm:mb-5">
       <div className="hidden sm:block mr-10">
@@ -44,6 +47,7 @@ const Post = ({
           active={byCat}
           onClick={() => {
             byCat ? setActive("All") : setActive(category as Category);
+            pathname === "/post/[id]" && push("/");
           }}
         >
           {category}
