@@ -1,8 +1,9 @@
-import React from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import InteractiveElement from "./InteractiveElement";
 import UpvoteButton from "./UpvoteButton";
 import { FaComment } from "react-icons/fa";
 import Link from "next/link";
+import { Category } from "../../types";
 
 interface Types {
   id: string;
@@ -13,9 +14,20 @@ interface Types {
   _count: {
     comments: number;
   };
+  byCat?: boolean;
+  setActive: Dispatch<SetStateAction<Category | "All">>;
 }
 
-const Post = ({ id, title, desc, category, upvotes, _count }: Types) => {
+const Post = ({
+  id,
+  title,
+  desc,
+  category,
+  upvotes,
+  _count,
+  byCat = false,
+  setActive,
+}: Types) => {
   return (
     <section className="p-6 rounded-lg flex bg-white mb-4 sm:mb-5">
       <div className="hidden sm:block mr-10">
@@ -28,7 +40,14 @@ const Post = ({ id, title, desc, category, upvotes, _count }: Types) => {
           </a>
         </Link>
         <p className="text-sm text-dark-gray sm:text-base">{desc}</p>
-        <InteractiveElement onClick={() => null}>{category}</InteractiveElement>
+        <InteractiveElement
+          active={byCat}
+          onClick={() => {
+            byCat ? setActive("All") : setActive(category as Category);
+          }}
+        >
+          {category}
+        </InteractiveElement>
         <div className="flex justify-between sm:hidden">
           <UpvoteButton upvotes={upvotes} />
           <div className="flex items-center">

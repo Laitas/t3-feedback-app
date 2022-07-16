@@ -1,4 +1,6 @@
 import type { NextPage } from "next";
+import { useState } from "react";
+import { Category } from "../../types";
 import Header from "../components/Header";
 import Hero from "../components/Hero";
 import InteractiveSection from "../components/InteractiveSection";
@@ -8,24 +10,39 @@ import Roadmap from "../components/Roadmap";
 import { trpc } from "../utils/trpc";
 
 const Home: NextPage = () => {
-  // const feature = trpc.useQuery(["posts.byType", { category: "Feature" }]);
-  const { data, isLoading } = trpc.useQuery(["posts.all"]);
+  const [active, setActive] = useState<Category | "All">("All");
+  const category = trpc.useQuery(
+    ["posts.byCategory", { category: active as Category }],
+    {
+      enabled: active !== "All",
+    }
+  );
+  const all = trpc.useQuery(["posts.all"], {
+    enabled: active === "All",
+  });
 
   return (
     <div className="flex flex-col lg:flex-row">
       <section className="hidden sm:grid grid-cols-3 gap-4 mt-14 mb-10 mx-10 lg:flex flex-col lg:max-w-[16rem] lg:mt-8 lg:mr-0">
         <Hero />
-        <InteractiveSection />
+        <InteractiveSection active={active} setActive={setActive} />
         <Roadmap />
       </section>
       <Hero className="sm:hidden" />
       <Header className="sm:mx-10 lg:hidden" />
       <main className="mx-6 my-8 sm:mx-10 lg:w-full">
         <Header className="hidden lg:flex mb-6" />
-        {data?.map((post) => (
-          <Post key={post.id} {...post} />
-        ))}
-        {isLoading && [...Array(10)].map((i) => <PostSkeleton key={i} />)}
+        {active === "All" &&
+          all.data?.map((post) => (
+            <Post key={post.id} {...post} setActive={setActive} />
+          ))}
+        {active !== "All" &&
+          category.data?.map((post) => (
+            <Post key={post.id} {...post} byCat setActive={setActive} />
+          ))}
+        {all.isLoading ||
+          (category.isLoading &&
+            [...Array(10)].map((i) => <PostSkeleton key={i} />))}
       </main>
     </div>
   );

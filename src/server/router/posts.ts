@@ -2,7 +2,7 @@ import { createRouter } from "./context";
 import { z } from "zod";
 
 export const postsRouter = createRouter()
-  .query("byType", {
+  .query("byCategory", {
     input: z.object({
       category: z.enum(["UI", "UX", "Enhancement", "Bug", "Feature"]),
     }),
