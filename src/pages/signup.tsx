@@ -48,6 +48,7 @@ const SignUp = () => {
             Email
             <Controller
               name="email"
+              defaultValue=""
               control={control}
               rules={{ required: true }}
               render={({ field }) => (
@@ -59,6 +60,7 @@ const SignUp = () => {
             Username
             <Controller
               name="username"
+              defaultValue=""
               control={control}
               rules={{
                 required: true,
@@ -80,6 +82,7 @@ const SignUp = () => {
             Name
             <Controller
               name="name"
+              defaultValue=""
               control={control}
               rules={{ required: true }}
               render={({ field }) => (
@@ -98,8 +101,12 @@ const SignUp = () => {
             Password
             <Controller
               name="password"
+              defaultValue=""
               control={control}
-              rules={{ required: "Can't be shorter than 6 characters" }}
+              rules={{
+                required: true,
+                minLength: 6,
+              }}
               render={({ field }) => (
                 <Input
                   type="password"
@@ -109,7 +116,10 @@ const SignUp = () => {
                     errors.repeat_password?.type === "validate" ||
                     errors.password?.type === "required"
                   }
-                  errorText={errors.repeat_password?.message}
+                  errorText={
+                    errors.repeat_password?.message ||
+                    "Can't be shorter than 6 characters"
+                  }
                 />
               )}
             />
@@ -118,9 +128,11 @@ const SignUp = () => {
             Repeat password
             <Controller
               name="repeat_password"
+              defaultValue=""
               control={control}
               rules={{
-                required: "Can't be shorter than 6 characters",
+                required: true,
+                minLength: 6,
                 validate: (val) =>
                   val === watch("password") || "Passwords do not match",
               }}
@@ -133,7 +145,10 @@ const SignUp = () => {
                     errors.repeat_password?.type === "validate" ||
                     errors.repeat_password?.type === "required"
                   }
-                  errorText={errors.repeat_password?.message}
+                  errorText={
+                    errors.repeat_password?.message ||
+                    "Can't be shorter than 6 characters"
+                  }
                 />
               )}
             />
