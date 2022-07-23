@@ -1,51 +1,36 @@
 import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { ChangeEvent, FormEvent, useState } from "react";
 import BackButtonTransparent from "../components/BackButtonTransparent";
 import ButtonPurple from "../components/ButtonPurple";
 import Input from "../components/Input";
-import useSignUpValidation from "../hooks/validations/useSignUpValidation";
 import { trpc } from "../utils/trpc";
+import { useForm, Controller, SubmitHandler } from "react-hook-form";
 
-const initialValues = {
-  email: "",
-  name: "",
-  username: "",
-  password: "",
+type IFormInput = {
+  email: string;
+  name: string;
+  username: string;
+  password: string;
+  repeat_password: string;
 };
 
 const SignUp = () => {
-  const [errors, setErrors] = useState({
-    password: false,
-    email: false,
-    name: false,
-    username: false,
-  });
-  const [errorText, setErrorText] = useState(initialValues);
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+    watch,
+  } = useForm<IFormInput>();
+  const onSubmit: SubmitHandler<IFormInput> = (data) => {
+    signup.mutateAsync(data);
+  };
   const signup = trpc.useMutation("user.signup", {
     onSuccess: async (data) =>
       await signIn("credentials", { ...data, callbackUrl: "/" }),
     onError: (error) => console.log(error),
   });
   const { back } = useRouter();
-  const [form, setForm] = useState({ ...initialValues, repeat_password: "" });
-  const { validations } = useSignUpValidation({
-    form,
-    setErrorText,
-    errorText,
-    setErrors,
-  });
-
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault();
-    if (!validations()) return;
-    signup.mutate(form);
-  };
-
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
 
   return (
     <div className="flex flex-col justify-center min-h-screen">
@@ -55,55 +40,102 @@ const SignUp = () => {
           className="absolute -top-16 left-0"
         />
         <h1 className="text-2xl text-light-accent font-bold">Sign up</h1>
-        <form onSubmit={handleSubmit} className="flex flex-col gap-6 my-6">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="flex flex-col gap-6 my-6"
+        >
           <label className="flex flex-col">
             Email
-            <Input
-              error={errors.email}
+            <Controller
               name="email"
-              onChange={handleChange}
-              value={form.email}
+              control={control}
+              rules={{ required: true }}
+              render={({ field }) => (
+                <Input {...field} error={errors.email?.type === "required"} />
+              )}
             />
           </label>
           <label className="flex flex-col">
             Username
-            <Input
-              error={errors.username}
+            <Controller
               name="username"
-              onChange={handleChange}
-              value={form.username}
-              errorText={errorText.username}
+              control={control}
+              rules={{
+                required: true,
+                minLength: 3,
+              }}
+              render={({ field }) => (
+                <Input
+                  {...field}
+                  error={
+                    errors.username?.type === "minLength" ||
+                    errors.username?.type === "required"
+                  }
+                  errorText="Can't be shorter than 3 characters"
+                />
+              )}
             />
           </label>
           <label className="flex flex-col">
             Name
-            <Input
-              error={errors.name}
+            <Controller
               name="name"
-              onChange={handleChange}
-              value={form.name}
+              control={control}
+              rules={{ required: true }}
+              render={({ field }) => (
+                <Input
+                  {...field}
+                  error={
+                    errors.name?.type === "minLength" ||
+                    errors.name?.type === "required"
+                  }
+                  errorText="Can't be shorter than 3 characters"
+                />
+              )}
             />
           </label>
           <label className="flex flex-col">
             Password
-            <Input
+            <Controller
               name="password"
-              type={"password"}
-              onChange={handleChange}
-              value={form.password}
-              error={errors.password}
-              errorText={errorText.password}
+              control={control}
+              rules={{ required: "Can't be shorter than 6 characters" }}
+              render={({ field }) => (
+                <Input
+                  type="password"
+                  {...field}
+                  error={
+                    errors.password?.type === "minLength" ||
+                    errors.repeat_password?.type === "validate" ||
+                    errors.password?.type === "required"
+                  }
+                  errorText={errors.repeat_password?.message}
+                />
+              )}
             />
           </label>
           <label className="flex flex-col">
             Repeat password
-            <Input
+            <Controller
               name="repeat_password"
-              type={"password"}
-              onChange={handleChange}
-              value={form.repeat_password}
-              error={errors.password}
-              errorText={errorText.password}
+              control={control}
+              rules={{
+                required: "Can't be shorter than 6 characters",
+                validate: (val) =>
+                  val === watch("password") || "Passwords do not match",
+              }}
+              render={({ field }) => (
+                <Input
+                  type="password"
+                  {...field}
+                  error={
+                    errors.repeat_password?.type === "minLength" ||
+                    errors.repeat_password?.type === "validate" ||
+                    errors.repeat_password?.type === "required"
+                  }
+                  errorText={errors.repeat_password?.message}
+                />
+              )}
             />
           </label>
           <ButtonPurple type="submit">Sign in</ButtonPurple>
