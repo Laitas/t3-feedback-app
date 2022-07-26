@@ -1,6 +1,7 @@
 import sha256 from "crypto-js/sha256";
 import { createRouter } from "./context";
 import { z } from "zod";
+import * as trpc from "@trpc/server";
 
 const hashPassword = (password: string) => {
   return sha256(password).toString();
@@ -50,5 +51,11 @@ export const userRouter = createRouter()
           email: user.email,
           picture: user.image,
         };
+      else {
+        throw new trpc.TRPCError({
+          code: "UNAUTHORIZED",
+          message: "Invalid credentials",
+        });
+      }
     },
   });

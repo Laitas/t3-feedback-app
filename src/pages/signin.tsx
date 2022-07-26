@@ -1,32 +1,35 @@
 import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { ChangeEvent, FormEvent, useState } from "react";
+import { useState } from "react";
 import BackButtonTransparent from "../components/BackButtonTransparent";
 import ButtonPurple from "../components/ButtonPurple";
 import Input from "../components/Input";
 import { trpc } from "../utils/trpc";
+import { useForm, Controller, SubmitHandler } from "react-hook-form";
+
+type IFormInput = {
+  email: string;
+  password: string;
+};
 
 const SignIn = () => {
   const checkCredentials = trpc.useMutation("user.checkCredentials", {
     onSuccess: async (data) =>
       await signIn("credentials", { ...data, callbackUrl: "/" }),
-    onError: (error) => console.log(error),
+    onError: (error) => setError(error.message),
   });
   const { back } = useRouter();
-  const [form, setForm] = useState({
-    email: "",
-    password: "",
-  });
-
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault();
-    checkCredentials.mutate(form);
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+    watch,
+  } = useForm<IFormInput>();
+  const onSubmit: SubmitHandler<IFormInput> = (data) => {
+    checkCredentials.mutateAsync(data);
   };
-
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
+  const [error, setError] = useState("");
 
   return (
     <div className="flex flex-col justify-center min-h-screen">
@@ -36,26 +39,47 @@ const SignIn = () => {
           className="absolute -top-16 left-0"
         />
         <h1 className="text-2xl text-light-accent font-bold">Sign in</h1>
-        <form onSubmit={handleSubmit} className="flex flex-col gap-6 my-6">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="flex flex-col gap-6 my-6"
+        >
           <label className="flex flex-col">
             Email
-            <Input
-              error={false}
+            <Controller
+              control={control}
               name="email"
-              onChange={handleChange}
-              value={form.email}
+              rules={{ required: true }}
+              render={({ field }) => (
+                <Input {...field} error={errors.email?.type === "required"} />
+              )}
             />
           </label>
           <label className="flex flex-col">
             Password
-            <Input
-              error={false}
+            <Controller
+              control={control}
               name="password"
-              type={"password"}
-              onChange={handleChange}
-              value={form.password}
+              rules={{
+                required: true,
+                minLength: {
+                  value: 6,
+                  message: "Password must be at least 6 characters long",
+                },
+              }}
+              render={({ field }) => (
+                <Input
+                  {...field}
+                  type="password"
+                  error={
+                    errors.password?.type === "required" ||
+                    errors.password?.type === "minLength"
+                  }
+                  errorText={errors.password?.message}
+                />
+              )}
             />
           </label>
+          {error && <p className="text-red-500">{error}</p>}
           <ButtonPurple type="submit">Sign in</ButtonPurple>
         </form>
         <p>
