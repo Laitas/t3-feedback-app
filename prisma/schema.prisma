@@ -73,7 +73,7 @@ model Post {
     upvotes        Int
     category       String
     status         String?
-    commentsLength Int
+    commentsLength Int       @default(0)
 }
 
 model Comment {
