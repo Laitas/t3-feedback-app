@@ -56,7 +56,7 @@ const PostPage = () => {
         <main className="flex flex-col gap-6 mb-10">
           <Post {...data} />
           <CommentsSection
-            count={data._count.comments}
+            count={data.commentsLength}
             comments={data.comments && data.comments}
           />
           {session && (

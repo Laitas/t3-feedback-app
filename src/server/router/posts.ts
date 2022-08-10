@@ -11,13 +11,6 @@ export const postsRouter = createRouter()
         where: {
           category: input?.category,
         },
-        include: {
-          _count: {
-            select: {
-              comments: true,
-            },
-          },
-        },
       });
     },
   })
@@ -55,11 +48,6 @@ export const postsRouter = createRouter()
               },
             },
           },
-          _count: {
-            select: {
-              comments: true,
-            },
-          },
         },
       });
     },
@@ -93,6 +81,7 @@ export const postsRouter = createRouter()
           category,
           upvotes: 0,
           userId,
+          commentsLength: 0,
         },
       });
     },

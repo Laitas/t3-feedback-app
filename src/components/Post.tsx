@@ -14,9 +14,7 @@ interface Types {
   desc: string;
   category: string;
   upvotes: number;
-  _count: {
-    comments: number;
-  };
+  commentsLength: number;
   byCat?: boolean;
 }
 
@@ -26,7 +24,7 @@ const Post = ({
   desc,
   category,
   upvotes,
-  _count,
+  commentsLength,
   byCat = false,
 }: Types) => {
   const [, setActive] = useAtom(cat);
@@ -57,7 +55,7 @@ const Post = ({
           <div className="flex items-center">
             <FaComment className="text-[#CDD2EE]" />
             <span className="ml-2 text-light-accent font-bold">
-              {_count.comments}
+              {commentsLength}
             </span>
           </div>
         </div>
@@ -65,7 +63,7 @@ const Post = ({
       <div className="hidden sm:flex items-center ml-6">
         <FaComment className="text-[#CDD2EE]" />
         <span className="ml-2 text-light-accent font-bold">
-          {_count.comments}
+          {commentsLength}
         </span>
       </div>
     </section>

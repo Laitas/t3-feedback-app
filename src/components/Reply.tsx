@@ -1,4 +1,5 @@
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 import React, { FormEvent, useState } from "react";
 import { trpc } from "../utils/trpc";
 import ButtonPurple from "./ButtonPurple";
@@ -9,6 +10,8 @@ interface Types {
   replyingTo: string;
 }
 const Reply = ({ commentId, replyingTo }: Types) => {
+  const router = useRouter();
+  const postId = router.query.id as string;
   const newReply = trpc.useMutation(["comments.newReply"], {
     onSuccess: (data) => console.log(data),
     onError: (data) => console.log(data),
@@ -23,6 +26,7 @@ const Reply = ({ commentId, replyingTo }: Types) => {
         reply: comment,
         commentId,
         replyingTo,
+        postId,
       });
   };
   const [comment, setComment] = useState("");
