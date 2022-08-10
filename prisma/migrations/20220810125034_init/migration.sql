@@ -55,6 +55,8 @@ CREATE TABLE "Post" (
     "desc" TEXT NOT NULL,
     "upvotes" INTEGER NOT NULL,
     "category" TEXT NOT NULL,
+    "status" TEXT,
+    "commentsLength" INTEGER NOT NULL DEFAULT 0,
 
     CONSTRAINT "Post_pkey" PRIMARY KEY ("id")
 );

@@ -1,6 +1,7 @@
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import React, { FormEvent, useState } from "react";
+import { useQueryClient } from "react-query";
 import { trpc } from "../utils/trpc";
 import ButtonPurple from "./ButtonPurple";
 import TextArea from "./TextArea";
@@ -10,10 +11,15 @@ interface Types {
   replyingTo: string;
 }
 const Reply = ({ commentId, replyingTo }: Types) => {
+  const [comment, setComment] = useState("");
+  const queryClient = useQueryClient();
   const router = useRouter();
   const postId = router.query.id as string;
   const newReply = trpc.useMutation(["comments.newReply"], {
-    onSuccess: (data) => console.log(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries(["posts.byId", { id: postId }]);
+      setComment("");
+    },
     onError: (data) => console.log(data),
   });
   const { data: session } = useSession();
@@ -29,7 +35,6 @@ const Reply = ({ commentId, replyingTo }: Types) => {
         postId,
       });
   };
-  const [comment, setComment] = useState("");
   return (
     <form className="flex flex-col sm:flex-row mb-4" onSubmit={handleSubmit}>
       <TextArea
