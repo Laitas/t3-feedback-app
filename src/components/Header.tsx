@@ -9,7 +9,7 @@ const Header = ({ className = "" }) => {
       className={`bg-dark-accent sm:rounded-lg flex justify-between py-2 px-6 ${className}`}
     >
       <SortDropdown />
-      <Link href="/add-feedback" passHref>
+      <Link href="/add-feedback" passHref legacyBehavior>
         <LinkPurple className="flex items-center">+ Add Feedback</LinkPurple>
       </Link>
     </header>

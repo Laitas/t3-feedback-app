@@ -19,7 +19,7 @@ const SideNav = ({ open }: { open: boolean }) => {
         }`}
       >
         {status === "unauthenticated" && (
-          <Link href="/signin" passHref>
+          <Link href="/signin" passHref legacyBehavior>
             <LinkPurple>Sign in</LinkPurple>
           </Link>
         )}

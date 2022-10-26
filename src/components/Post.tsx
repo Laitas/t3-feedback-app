@@ -35,10 +35,12 @@ const Post = ({
         <UpvoteButton upvotes={upvotes} />
       </div>
       <section className="flex flex-col gap-4 flex-1">
-        <Link href={`/post/${id}`}>
-          <a className="text-sm text-light-accent font-bold sm:text-lg hover:text-blue-1 transition-colors">
-            {title}
-          </a>
+        <Link
+          href={`/post/${id}`}
+          className="text-sm text-light-accent font-bold sm:text-lg hover:text-blue-1 transition-colors">
+
+          {title}
+
         </Link>
         <p className="text-sm text-dark-gray sm:text-base">{desc}</p>
         <InteractiveElement

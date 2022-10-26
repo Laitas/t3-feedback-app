@@ -5,8 +5,8 @@ const Roadmap = () => {
     <section className="bg-white p-6 rounded-lg flex flex-col">
       <section className="flex justify-between items-center mb-6">
         <h2 className="font-bold text-lg">Roadmap</h2>
-        <Link href="/roadmap">
-          <a className="text-blue-1 underline">View</a>
+        <Link href="/roadmap" className="text-blue-1 underline">
+          View
         </Link>
       </section>
       <ul className="text-dark-gray list-disc ml-6">

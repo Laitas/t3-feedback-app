@@ -48,7 +48,7 @@ const PostPage = () => {
         <section className="flex justify-between items-center py-6 sm:pt-14">
           <BackButtonTransparent onClick={() => push("/")} />{" "}
           {data.userId === session?.user.id && (
-            <Link href={id + "/edit"} passHref>
+            <Link href={id + "/edit"} passHref legacyBehavior>
               <LinkBlue>Edit Feedback</LinkBlue>
             </Link>
           )}
