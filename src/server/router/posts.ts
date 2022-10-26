@@ -1,5 +1,6 @@
 import { createRouter } from "./context";
 import { z } from "zod";
+import * as trpc from "@trpc/server";
 
 export const postsRouter = createRouter()
   .query("byCategory", {
@@ -104,6 +105,27 @@ export const postsRouter = createRouter()
           upvotes: 0,
           userId,
         },
+      });
+    },
+  })
+  .mutation("delete", {
+    input: z.object({
+      userId: z.string(),
+      id: z.string(),
+    }),
+    async resolve({ ctx, input: { userId, id } }) {
+      const post = await ctx.prisma.post.findUnique({
+        where: { id },
+      });
+      if (post?.id === id && post?.userId === userId) {
+        await ctx.prisma.post.delete({
+          where: { id },
+        });
+        return "success";
+      }
+      throw new trpc.TRPCError({
+        code: "UNAUTHORIZED",
+        message: "Invalid credentials",
       });
     },
   });

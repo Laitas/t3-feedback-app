@@ -49,7 +49,7 @@ const AddFeedback = () => {
   };
 
   return (
-    <div className="flex flex-col justify-center min-h-screen">
+    <div className="flex flex-col justify-center min-h-screen my-24">
       <main className="p-12 rounded-lg bg-white max-w-sm md:max-w-xl w-full mx-auto relative">
         <BackButtonTransparent
           onClick={back}

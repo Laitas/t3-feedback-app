@@ -25,6 +25,9 @@ const Edit = () => {
   const updatePost = trpc.useMutation(["posts.edit"], {
     onSuccess: () => push("/post/" + id),
   });
+  const deletePost = trpc.useMutation(["posts.delete"], {
+    onSuccess: () => push("/"),
+  });
   const { data: session } = useSession();
   const [category, setCategory] = useState<Category>("Feature");
   const [errors, setErrors] = useState({
@@ -114,7 +117,13 @@ const Edit = () => {
           <section className="flex flex-col gap-4">
             <ButtonPurple type="submit">Save Changes</ButtonPurple>
             <ButtonDark onClick={back}>Cancel</ButtonDark>
-            <ButtonRed>Delete</ButtonRed>
+            <ButtonRed
+              onClick={() =>
+                deletePost.mutate({ id, userId: session?.user.id })
+              }
+            >
+              Delete
+            </ButtonRed>
           </section>
         </form>
       </main>

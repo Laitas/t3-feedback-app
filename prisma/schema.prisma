@@ -65,7 +65,7 @@ model VerificationToken {
 model Post {
     id             String    @id @default(cuid())
     createdAt      DateTime  @default(now())
-    user           User      @relation(fields: [userId], references: [id])
+    user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
     userId         String
     title          String
     desc           String
