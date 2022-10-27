@@ -12,7 +12,7 @@ interface Types extends Comments {
 const Comment = ({
   commentId,
   comment,
-  author: { username, id, image, name },
+  author: { username, image, name },
   className,
   replies,
 }: Types) => {

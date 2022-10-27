@@ -46,7 +46,7 @@ model User {
     email         String?   @unique
     emailVerified DateTime?
     password      String?
-    image         String    @default("https://res.cloudinary.com/dfzejvvsl/image/upload/v1656084356/cld-sample-3.jpg")
+    image         String    @default("/images/default_avi.png")
     accounts      Account[]
     sessions      Session[]
     posts         Post[]
