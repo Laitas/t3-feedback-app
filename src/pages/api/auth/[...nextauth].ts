@@ -26,6 +26,7 @@ export default NextAuth({
         username: { label: "Username", type: "text", placeholder: "jsmith" },
         password: { label: "Password", type: "password" },
       },
+      //@ts-ignore
       async authorize(credentials) {
         if (credentials) {
           return credentials;
