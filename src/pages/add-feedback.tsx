@@ -5,7 +5,7 @@ import { Category } from "../../types";
 import BackButtonTransparent from "../components/BackButtonTransparent";
 import ButtonDark from "../components/ButtonDark";
 import ButtonPurple from "../components/ButtonPurple";
-import Dropdown from "../components/Dropdown";
+import Dropdown from "../components/CategoryDropdown";
 import Input from "../components/Input";
 import useAddFeedbackValidation from "../hooks/validations/useAddFeedbackValidation";
 import { trpc } from "../utils/trpc";

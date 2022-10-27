@@ -38,9 +38,7 @@ const PostPage = () => {
         });
     }
   };
-  console.log(data);
   const { data: session } = useSession();
-  console.log(session);
 
   if (data)
     return (

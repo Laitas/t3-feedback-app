@@ -1,14 +1,15 @@
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { Category, Status } from "../../../../types";
 import BackButtonTransparent from "../../../components/BackButtonTransparent";
 import ButtonDark from "../../../components/ButtonDark";
 import ButtonPurple from "../../../components/ButtonPurple";
 import ButtonRed from "../../../components/ButtonRed";
-import Dropdown from "../../../components/Dropdown";
+import CategoryDropdown from "../../../components/CategoryDropdown";
 import Input from "../../../components/Input";
+import StatusDropdown from "../../../components/StatusDropdown";
 import { trpc } from "../../../utils/trpc";
-import { Category } from "../../../../types";
 
 interface Inputs {
   title: string;
@@ -30,6 +31,7 @@ const Edit = () => {
   });
   const { data: session } = useSession();
   const [category, setCategory] = useState<Category>("Feature");
+  const [status, setStatus] = useState<Status>("None");
   const [errors, setErrors] = useState({
     title: false,
     desc: false,
@@ -47,6 +49,7 @@ const Edit = () => {
       userId: session?.user.id as string,
       title: form.title,
       desc: form.desc,
+      status,
     });
   };
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -55,6 +58,9 @@ const Edit = () => {
 
   useEffect(() => {
     if (data) {
+      if (data.status) {
+        setStatus(data.status as Status);
+      }
       setCategory(data.category as Category);
       setForm({ title: data.title, desc: data.desc });
     }
@@ -63,7 +69,7 @@ const Edit = () => {
   if (!data) return <h1>Loading</h1>;
   if (data.userId !== session?.user.id) return <h1>fakof</h1>;
   return (
-    <div className="flex flex-col justify-center min-h-screen">
+    <div className="flex flex-col justify-center min-h-screen my-24">
       <main className="p-12 rounded-lg bg-white max-w-sm md:max-w-xl w-full mx-auto relative">
         <BackButtonTransparent
           onClick={back}
@@ -93,9 +99,20 @@ const Edit = () => {
             <p className="text-sm text-dark-gray mb-4">
               Choose a category for your feedback
             </p>
-            <Dropdown
+            <CategoryDropdown
               category={category}
               setCategory={setCategory}
+              className="top-28 w-full"
+            />
+          </section>
+          <section className="flex flex-col relative">
+            <p className="text-sm font-bold text-light-accent">Status</p>
+            <p className="text-sm text-dark-gray mb-4">
+              Update current feedback status
+            </p>
+            <StatusDropdown
+              status={status}
+              setStatus={setStatus}
               className="top-28 w-full"
             />
           </section>

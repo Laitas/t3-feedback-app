@@ -3,6 +3,30 @@ import { z } from "zod";
 import * as trpc from "@trpc/server";
 
 export const postsRouter = createRouter()
+  .query("roadmap", {
+    async resolve({ ctx }) {
+      const planned = await ctx.prisma.post.count({
+        where: {
+          status: "Planned",
+        },
+      });
+      const inProgress = await ctx.prisma.post.count({
+        where: {
+          status: "In-Progress",
+        },
+      });
+      const live = await ctx.prisma.post.count({
+        where: {
+          status: "Live",
+        },
+      });
+      return {
+        planned,
+        live,
+        inProgress,
+      };
+    },
+  })
   .query("byCategory", {
     input: z.object({
       category: z.enum(["UI", "UX", "Enhancement", "Bug", "Feature"]),
@@ -94,15 +118,20 @@ export const postsRouter = createRouter()
       category: z.enum(["UI", "UX", "Enhancement", "Bug", "Feature"]),
       userId: z.string(),
       id: z.string(),
+      status: z.enum(["Planned", "In-Progress", "Live", "None"]).optional(),
     }),
-    async resolve({ ctx, input: { title, desc, category, userId, id } }) {
+    async resolve({
+      ctx,
+      input: { title, desc, category, userId, id, status },
+    }) {
       return await ctx.prisma.post.update({
         where: { id },
         data: {
           title,
           desc,
           category,
-          upvotes: 0,
+          upvotes: undefined,
+          status,
           userId,
         },
       });

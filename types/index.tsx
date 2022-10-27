@@ -1,5 +1,5 @@
 import { Comment, Reply } from "@prisma/client";
-import { categories } from "../src/constants";
+import { categories, statuses } from "../src/constants";
 
 export interface Button {
   onClick?: () => void;
@@ -14,6 +14,7 @@ export interface Link {
 }
 
 export type Category = typeof categories[number];
+export type Status = typeof statuses[number];
 
 interface Repl extends Reply {
   author: Comments["author"];

@@ -9,4 +9,6 @@ export const categories = [
   "Feature",
 ] as const;
 
+export const statuses = ["Planned", "In-Progress", "Live", "None"] as const;
+
 export const cat = atom<Category | "All">("All");

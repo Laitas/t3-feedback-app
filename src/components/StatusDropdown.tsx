@@ -1,15 +1,15 @@
 import React, { Dispatch, SetStateAction, useState } from "react";
 import { HiChevronDown, HiCheck } from "react-icons/hi";
-import { Category } from "../../types";
-import { categories } from "../constants";
+import { Category, Status } from "../../types";
+import { statuses } from "../constants";
 
 interface Types {
   className?: string;
-  category: string;
-  setCategory: Dispatch<SetStateAction<Category>>;
+  status: string;
+  setStatus: Dispatch<SetStateAction<Status>>;
 }
 
-const Dropdown = ({ className = "", category, setCategory }: Types) => {
+const StatusDropdown = ({ className = "", status, setStatus }: Types) => {
   const [active, setActive] = useState(false);
   return (
     <>
@@ -18,7 +18,7 @@ const Dropdown = ({ className = "", category, setCategory }: Types) => {
         onClick={() => setActive(!active)}
         className="relative group flex items-center justify-between text-sm text-dark-accent bg-gray-1 rounded-md py-6 px-3 min-w-[16rem]"
       >
-        {category}
+        {status}
         <HiChevronDown
           className={`ml-1 ${
             active ? "rotate-180" : "group-hover:rotate-180"
@@ -32,16 +32,16 @@ const Dropdown = ({ className = "", category, setCategory }: Types) => {
             className
           }
         >
-          {categories.map((i, idx) => (
+          {statuses.map((i, idx) => (
             <li
               className="border-b cursor-pointer flex items-center justify-between py-3 px-6 hover:text-purple-1"
               key={idx}
               onClick={() => {
-                setCategory(i);
+                setStatus(i);
                 setActive(false);
               }}
             >
-              {i} {category === i && <HiCheck className="text-purple-1" />}
+              {i} {status === i && <HiCheck className="text-purple-1" />}
             </li>
           ))}
         </ul>
@@ -50,4 +50,4 @@ const Dropdown = ({ className = "", category, setCategory }: Types) => {
   );
 };
 
-export default Dropdown;
+export default StatusDropdown;
