@@ -11,12 +11,16 @@ import { trpc } from "../../../utils/trpc";
 
 const PostPage = () => {
   const [comment, setComment] = useState("");
+  const { data: session } = useSession();
   const { query, push } = useRouter();
   const id = query.id as string;
   const [error, setError] = useState(false);
-  const { data, refetch } = trpc.useQuery(["posts.byId", { id }], {
-    enabled: id !== undefined,
-  });
+  const { data, refetch } = trpc.useQuery(
+    ["posts.byId", { id, userId: session?.user.id }],
+    {
+      enabled: id !== undefined,
+    }
+  );
   const newComment = trpc.useMutation(["comments.new"], {
     onSuccess: () => {
       refetch();
@@ -38,7 +42,6 @@ const PostPage = () => {
         });
     }
   };
-  const { data: session } = useSession();
 
   if (data)
     return (

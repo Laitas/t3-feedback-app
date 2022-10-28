@@ -1,6 +1,7 @@
 import { createRouter } from "./context";
 import { z } from "zod";
 import * as trpc from "@trpc/server";
+import { Post, Upvote } from "@prisma/client";
 
 export const postsRouter = createRouter()
   .query("roadmap", {
@@ -30,21 +31,35 @@ export const postsRouter = createRouter()
   .query("byCategory", {
     input: z.object({
       category: z.enum(["UI", "UX", "Enhancement", "Bug", "Feature"]),
+      userId: z.string().optional(),
     }),
     async resolve({ ctx, input }) {
-      return await ctx.prisma.post.findMany({
+      const posts = await ctx.prisma.post.findMany({
         where: {
           category: input?.category,
         },
+        include: {
+          _count: {
+            select: {
+              upvotes: true,
+            },
+          },
+          upvotes: true,
+        },
       });
+      return posts.map(({ upvotes, ...post }) => ({
+        ...post,
+        upvote: !!upvotes.find((i) => i.userId === input.userId),
+      }));
     },
   })
   .query("byId", {
     input: z.object({
       id: z.string(),
+      userId: z.string().optional(),
     }),
     async resolve({ ctx, input }) {
-      return await ctx.prisma.post.findUnique({
+      const post = await ctx.prisma.post.findUnique({
         where: {
           id: input?.id,
         },
@@ -73,22 +88,46 @@ export const postsRouter = createRouter()
               },
             },
           },
+          _count: {
+            select: {
+              upvotes: true,
+            },
+          },
+          upvotes: true,
         },
       });
+      if (post) {
+        const updatedPost = {
+          ...post,
+          upvote: !!post.upvotes.find((i) => i.userId === input.userId),
+        };
+        if ("upvotes" in updatedPost) {
+          //@ts-ignore
+          delete updatedPost.upvotes;
+        }
+        return updatedPost;
+      }
     },
   })
   .query("all", {
-    async resolve({ ctx }) {
+    input: z.object({
+      userId: z.string().optional(),
+    }),
+    async resolve({ ctx, input }) {
       const posts = await ctx.prisma.post.findMany({
         include: {
           _count: {
             select: {
-              comments: true,
+              upvotes: true,
             },
           },
+          upvotes: true,
         },
       });
-      return posts;
+      return posts.map(({ upvotes, ...post }) => ({
+        ...post,
+        upvote: !!upvotes.find((i) => i.userId === input.userId),
+      }));
     },
   })
   .mutation("new", {
@@ -104,7 +143,6 @@ export const postsRouter = createRouter()
           title,
           desc,
           category,
-          upvotes: 0,
           userId,
           commentsLength: 0,
         },
@@ -151,6 +189,51 @@ export const postsRouter = createRouter()
           where: { id },
         });
         return "success";
+      }
+      throw new trpc.TRPCError({
+        code: "UNAUTHORIZED",
+        message: "Invalid credentials",
+      });
+    },
+  })
+  .mutation("upvote", {
+    input: z.object({
+      userId: z.string(),
+      postId: z.string(),
+    }),
+    async resolve({ ctx, input: { userId, postId } }) {
+      const user = await ctx.prisma.user.findUnique({
+        where: {
+          id: userId,
+        },
+        include: {
+          upvote: {
+            include: {
+              user: true,
+            },
+          },
+        },
+      });
+      if (user) {
+        const upvote = user.upvote.find(
+          (i) => i.userId === userId && i.postId === postId
+        );
+        if (upvote) {
+          return await ctx.prisma.upvote
+            .delete({
+              where: { id: upvote.id },
+            })
+            .then(() => "deleted");
+        } else {
+          return await ctx.prisma.upvote
+            .create({
+              data: {
+                postId,
+                userId,
+              },
+            })
+            .then(() => "upvoted");
+        }
       }
       throw new trpc.TRPCError({
         code: "UNAUTHORIZED",

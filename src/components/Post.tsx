@@ -13,9 +13,12 @@ interface Types {
   title: string;
   desc: string;
   category: string;
-  upvotes: number;
+  _count: {
+    upvotes: number;
+  };
   commentsLength: number;
   byCat?: boolean;
+  upvote: boolean;
 }
 
 const Post = ({
@@ -23,24 +26,24 @@ const Post = ({
   title,
   desc,
   category,
-  upvotes,
+  _count,
   commentsLength,
   byCat = false,
+  upvote,
 }: Types) => {
   const [, setActive] = useAtom(cat);
   const { pathname, push } = useRouter();
   return (
     <section className="p-6 rounded-lg flex bg-white mb-4 sm:mb-5">
       <div className="hidden sm:block mr-10">
-        <UpvoteButton upvotes={upvotes} />
+        <UpvoteButton upvotes={_count.upvotes} postId={id} active={upvote} />
       </div>
       <section className="flex flex-col gap-4 flex-1">
         <Link
           href={`/post/${id}`}
-          className="text-sm text-light-accent font-bold sm:text-lg hover:text-blue-1 transition-colors">
-
+          className="text-sm text-light-accent font-bold sm:text-lg hover:text-blue-1 transition-colors"
+        >
           {title}
-
         </Link>
         <p className="text-sm text-dark-gray sm:text-base">{desc}</p>
         <InteractiveElement
@@ -53,7 +56,7 @@ const Post = ({
           {category}
         </InteractiveElement>
         <div className="flex justify-between sm:hidden">
-          <UpvoteButton upvotes={upvotes} />
+          <UpvoteButton upvotes={_count.upvotes} postId={id} active={upvote} />
           <div className="flex items-center">
             <FaComment className="text-[#CDD2EE]" />
             <span className="ml-2 text-light-accent font-bold">

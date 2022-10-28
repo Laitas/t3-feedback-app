@@ -11,16 +11,18 @@ import Roadmap from "../components/Roadmap";
 import { trpc } from "../utils/trpc";
 import { useAtom } from "jotai";
 import { cat } from "../constants";
+import { useSession } from "next-auth/react";
 
 const Home: NextPage = () => {
   const [active] = useAtom(cat);
+  const { data: session } = useSession();
   const category = trpc.useQuery(
     ["posts.byCategory", { category: active as Category }],
     {
       enabled: active !== "All",
     }
   );
-  const all = trpc.useQuery(["posts.all"], {
+  const all = trpc.useQuery(["posts.all", { userId: session?.user.id }], {
     enabled: active === "All",
   });
 
