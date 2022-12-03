@@ -1,5 +1,5 @@
 import type { NextPage } from "next";
-import { useState } from "react";
+import { useEffect } from "react";
 import { Category } from "../../types";
 import Header from "../components/Header";
 import Hero from "../components/Hero";
@@ -12,19 +12,44 @@ import { trpc } from "../utils/trpc";
 import { useAtom } from "jotai";
 import { cat } from "../constants";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 
 const Home: NextPage = () => {
-  const [active] = useAtom(cat);
+  const { query } = useRouter();
+  const sortQuery = query.sortBy as sortQuery;
+  const categoryQuery = query.category as Category;
+  const [active, setActive] = useAtom(cat);
   const { data: session } = useSession();
   const category = trpc.useQuery(
-    ["posts.byCategory", { category: active as Category }],
+    [
+      "posts.byCategory",
+      {
+        category: active as Category,
+        sortBy: (sortQuery?.toUpperCase() as sortQuery) ?? "NEW",
+      },
+    ],
     {
       enabled: active !== "All",
     }
   );
-  const all = trpc.useQuery(["posts.all", { userId: session?.user.id }], {
-    enabled: active === "All",
-  });
+  const all = trpc.useQuery(
+    [
+      "posts.all",
+      {
+        userId: session?.user.id,
+        sortBy: (sortQuery?.toUpperCase() as sortQuery) ?? "NEW",
+      },
+    ],
+    {
+      enabled: active === "All",
+    }
+  );
+
+  useEffect(() => {
+    if (categoryQuery && active !== categoryQuery) {
+      setActive(categoryQuery);
+    }
+  }, [active, categoryQuery, setActive]);
 
   return (
     <div className="flex flex-col lg:flex-row">
@@ -52,3 +77,9 @@ const Home: NextPage = () => {
 };
 
 export default Home;
+
+type sortQuery =
+  | "MOST_UPVOTES"
+  | "LEAST_UPVOTES"
+  | "MOST_COMMENTS"
+  | "LEAST_COMMENTS";

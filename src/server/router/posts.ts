@@ -1,7 +1,6 @@
-import { createRouter } from "./context";
-import { z } from "zod";
 import * as trpc from "@trpc/server";
-import { Post, Upvote } from "@prisma/client";
+import { z } from "zod";
+import { createRouter } from "./context";
 
 export const postsRouter = createRouter()
   .query("roadmap", {
@@ -32,21 +31,87 @@ export const postsRouter = createRouter()
     input: z.object({
       category: z.enum(["UI", "UX", "Enhancement", "Bug", "Feature"]),
       userId: z.string().optional(),
+      sortBy: z
+        .enum([
+          "MOST_UPVOTES",
+          "LEAST_UPVOTES",
+          "MOST_COMMENTS",
+          "LEAST_COMMENTS",
+          "NEW",
+        ])
+        .optional(),
     }),
     async resolve({ ctx, input }) {
-      const posts = await ctx.prisma.post.findMany({
-        where: {
-          category: input?.category,
-        },
-        include: {
+      const getPosts = async () => {
+        const include = {
           _count: {
             select: {
               upvotes: true,
             },
           },
           upvotes: true,
-        },
-      });
+        };
+        switch (input.sortBy) {
+          case "MOST_UPVOTES":
+            return await ctx.prisma.post.findMany({
+              orderBy: {
+                upvotes: {
+                  _count: "desc",
+                },
+              },
+              where: {
+                category: input?.category,
+              },
+              include: include,
+            });
+            break;
+          case "MOST_COMMENTS":
+            return await ctx.prisma.post.findMany({
+              orderBy: {
+                commentsLength: "desc",
+              },
+              where: {
+                category: input?.category,
+              },
+              include: include,
+            });
+            break;
+          case "LEAST_COMMENTS":
+            return await ctx.prisma.post.findMany({
+              orderBy: {
+                commentsLength: "asc",
+              },
+              where: {
+                category: input?.category,
+              },
+              include: include,
+            });
+            break;
+          case "LEAST_UPVOTES":
+            return await ctx.prisma.post.findMany({
+              orderBy: {
+                upvotes: {
+                  _count: "asc",
+                },
+              },
+              where: {
+                category: input?.category,
+              },
+              include: include,
+            });
+            break;
+          default:
+            return await ctx.prisma.post.findMany({
+              where: {
+                category: input?.category,
+              },
+              include: include,
+            });
+        }
+      };
+
+      const posts = await getPosts();
+
       return posts.map(({ upvotes, ...post }) => ({
         ...post,
         upvote: !!upvotes.find((i) => i.userId === input.userId),
@@ -112,18 +177,72 @@ export const postsRouter = createRouter()
   .query("all", {
     input: z.object({
       userId: z.string().optional(),
+      sortBy: z
+        .enum([
+          "MOST_UPVOTES",
+          "LEAST_UPVOTES",
+          "MOST_COMMENTS",
+          "LEAST_COMMENTS",
+          "NEW",
+        ])
+        .optional(),
     }),
     async resolve({ ctx, input }) {
-      const posts = await ctx.prisma.post.findMany({
-        include: {
+      const getPosts = async () => {
+        const include = {
           _count: {
             select: {
               upvotes: true,
             },
           },
           upvotes: true,
-        },
-      });
+        };
+        switch (input.sortBy) {
+          case "MOST_UPVOTES":
+            return await ctx.prisma.post.findMany({
+              orderBy: {
+                upvotes: {
+                  _count: "desc",
+                },
+              },
+              include: include,
+            });
+            break;
+          case "MOST_COMMENTS":
+            return await ctx.prisma.post.findMany({
+              orderBy: {
+                commentsLength: "desc",
+              },
+              include: include,
+            });
+            break;
+          case "LEAST_COMMENTS":
+            return await ctx.prisma.post.findMany({
+              orderBy: {
+                commentsLength: "asc",
+              },
+              include: include,
+            });
+            break;
+          case "LEAST_UPVOTES":
+            return await ctx.prisma.post.findMany({
+              orderBy: {
+                upvotes: {
+                  _count: "asc",
+                },
+              },
+              include: include,
+            });
+            break;
+          default:
+            return await ctx.prisma.post.findMany({
+              include: include,
+            });
+        }
+      };
+
+      const posts = await getPosts();
+
       return posts.map(({ upvotes, ...post }) => ({
         ...post,
         upvote: !!upvotes.find((i) => i.userId === input.userId),
